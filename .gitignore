@@ -1,0 +1,29 @@
+# --- Python Env ---
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# --- Build & Java/Scala ---
+target/
+*.class
+*.jar
+
+# --- Spark Checkpoints & Logs ---
+checkpoints/
+logs/
+*.log
+
+# --- Data & Machine Learning Outputs ---
+datasets/
+results/
+metrics/
+# Bỏ qua các file model nặng nếu có (.pkl, .h5, v.v.)
+models/*.pkl
+models/*.h5
+models/*.bin
+
+# --- OS rác ---
+.DS_Store
+.idea/
+.vscode/
