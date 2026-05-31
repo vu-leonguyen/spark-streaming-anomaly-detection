@@ -1,0 +1,67 @@
+realtime-offests=1000
+======================================
+BATCH ID: 234
+TOTAL ROWS: 998
+NORMAL ROWS: 736
+ANOMALY ROWS: 262
+LATENCY (ms): 465
+THROUGHPUT (rows/s): 2146.2365591397847
+======================================
+[stream execution thread for [id = cf1f8047-2f07-4229-81ff-7daed666626c, runId = 89705773-f4f7-4624-914b-2b12a425d21e]] INFO org.apache.spark.sql.execution.streaming.CheckpointFileManager - Writing atomically to file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/234 using temp file file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/.234.3435ec60-9e6e-4f75-8ad3-eb7573a6f96c.tmp
+[stream execution thread for [id = cf1f8047-2f07-4229-81ff-7daed666626c, runId = 89705773-f4f7-4624-914b-2b12a425d21e]] INFO org.apache.spark.sql.execution.streaming.CheckpointFileManager - Renamed temp file file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/.234.3435ec60-9e6e-4f75-8ad3-eb7573a6f96c.tmp to file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/234
+[stream execution thread for [id = cf1f8047-2f07-4229-81ff-7daed666626c, runId = 89705773-f4f7-4624-914b-2b12a425d21e]] INFO org.apache.spark.sql.execution.streaming.MicroBatchExecution - Streaming query made progress: {
+  "id" : "cf1f8047-2f07-4229-81ff-7daed666626c",
+  "runId" : "89705773-f4f7-4624-914b-2b12a425d21e",
+  "name" : null,
+  "timestamp" : "2026-05-12T15:48:05.005Z",
+  "batchId" : 234,
+  "numInputRows" : 4990,
+  "inputRowsPerSecond" : 997.2022382094325,
+  "processedRowsPerSecond" : 8302.828618968386,
+  "durationMs" : {
+    "addBatch" : 492,
+    "commitOffsets" : 46,
+    "getBatch" : 0,
+    "latestOffset" : 6,
+    "queryPlanning" : 13,
+    "triggerExecution" : 601,
+    "walCommit" : 42
+  },
+  "stateOperators" : [ ],
+  "sources" : [ {
+    "description" : "KafkaV2[Subscribe[jsonproducerp3]]",
+    "startOffset" : {
+      "jsonproducerp3" : {
+        "2" : 201888,
+        "1" : 202207,
+        "0" : 202464
+      }
+    },
+    "endOffset" : {
+      "jsonproducerp3" : {
+        "2" : 202222,
+        "1" : 202539,
+        "0" : 202796
+      }
+    },
+    "latestOffset" : {
+      "jsonproducerp3" : {
+        "2" : 207988,
+        "1" : 208258,
+        "0" : 208530
+      }
+    },
+    "numInputRows" : 4990,
+    "inputRowsPerSecond" : 997.2022382094325,
+    "processedRowsPerSecond" : 8302.828618968386,
+    "metrics" : {
+      "avgOffsetsBehindLatest" : "5739.666666666667",
+      "maxOffsetsBehindLatest" : "5766",
+      "minOffsetsBehindLatest" : "5719"
+    }
+  } ],
+  "sink" : {
+    "description" : "ForeachBatchSink",
+    "numOutputRows" : -1
+  }
+}

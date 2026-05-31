@@ -1,0 +1,87 @@
+output_realtime.java
+======================================
+BATCH ID: 150
+TOTAL ROWS: 1817
+NORMAL ROWS: 1302
+ANOMALY ROWS: 515
+LATENCY (ms): 3329
+THROUGHPUT (rows/s): 545.8095524181435
+======================================
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_180_piece0 on Ubuntu-BigData:41125 in memory (size: 155.1 KiB, free: 1047.0 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_175_piece0 on Ubuntu-BigData:41125 in memory (size: 152.3 KiB, free: 1047.1 MiB)
+[stream execution thread for [id = cf1f8047-2f07-4229-81ff-7daed666626c, runId = 6bf3b985-d08a-46c9-a69b-922f79129570]] INFO org.apache.spark.sql.execution.streaming.CheckpointFileManager - Writing atomically to file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/150 using temp file file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/.150.70880024-47fe-4d7e-862d-8720d92b128d.tmp
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_164_piece0 on Ubuntu-BigData:41125 in memory (size: 155.0 KiB, free: 1047.3 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_170_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1047.3 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_174_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1047.3 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_183_piece0 on Ubuntu-BigData:41125 in memory (size: 152.3 KiB, free: 1047.4 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_182_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1047.4 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_176_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1047.4 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_171_piece0 on Ubuntu-BigData:41125 in memory (size: 155.0 KiB, free: 1047.6 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_179_piece0 on Ubuntu-BigData:41125 in memory (size: 155.0 KiB, free: 1047.7 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_181_piece0 on Ubuntu-BigData:41125 in memory (size: 150.6 KiB, free: 1047.9 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_177_piece0 on Ubuntu-BigData:41125 in memory (size: 152.3 KiB, free: 1048.0 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_167_piece0 on Ubuntu-BigData:41125 in memory (size: 152.3 KiB, free: 1048.2 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_169_piece0 on Ubuntu-BigData:41125 in memory (size: 152.3 KiB, free: 1048.3 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_178_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1048.3 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_172_piece0 on Ubuntu-BigData:41125 in memory (size: 155.1 KiB, free: 1048.5 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_184_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1048.5 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_168_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1048.5 MiB)
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_173_piece0 on Ubuntu-BigData:41125 in memory (size: 150.6 KiB, free: 1048.6 MiB)
+[stream execution thread for [id = cf1f8047-2f07-4229-81ff-7daed666626c, runId = 6bf3b985-d08a-46c9-a69b-922f79129570]] INFO org.apache.spark.sql.execution.streaming.CheckpointFileManager - Renamed temp file file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/.150.70880024-47fe-4d7e-862d-8720d92b128d.tmp to file:/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1/commits/150
+[dispatcher-BlockManagerMaster] INFO org.apache.spark.storage.BlockManagerInfo - Removed broadcast_166_piece0 on Ubuntu-BigData:41125 in memory (size: 5.9 KiB, free: 1048.6 MiB)
+[stream execution thread for [id = cf1f8047-2f07-4229-81ff-7daed666626c, runId = 6bf3b985-d08a-46c9-a69b-922f79129570]] INFO org.apache.spark.sql.execution.streaming.MicroBatchExecution - Streaming query made progress: {
+  "id" : "cf1f8047-2f07-4229-81ff-7daed666626c",
+  "runId" : "6bf3b985-d08a-46c9-a69b-922f79129570",
+  "name" : null,
+  "timestamp" : "2026-05-12T14:44:20.001Z",
+  "batchId" : 150,
+  "numInputRows" : 9085,
+  "inputRowsPerSecond" : 1817.0,
+  "processedRowsPerSecond" : 2568.5609273395535,
+  "durationMs" : {
+    "addBatch" : 3359,
+    "commitOffsets" : 95,
+    "getBatch" : 1,
+    "latestOffset" : 11,
+    "queryPlanning" : 14,
+    "triggerExecution" : 3537,
+    "walCommit" : 56
+  },
+  "stateOperators" : [ ],
+  "sources" : [ {
+    "description" : "KafkaV2[Subscribe[jsonproducerp3]]",
+    "startOffset" : {
+      "jsonproducerp3" : {
+        "2" : 157256,
+        "1" : 157736,
+        "0" : 157908
+      }
+    },
+    "endOffset" : {
+      "jsonproducerp3" : {
+        "2" : 157853,
+        "1" : 158374,
+        "0" : 158490
+      }
+    },
+    "latestOffset" : {
+      "jsonproducerp3" : {
+        "2" : 157853,
+        "1" : 158374,
+        "0" : 158490
+      }
+    },
+    "numInputRows" : 9085,
+    "inputRowsPerSecond" : 1817.0,
+    "processedRowsPerSecond" : 2568.5609273395535,
+    "metrics" : {
+      "avgOffsetsBehindLatest" : "0.0",
+      "maxOffsetsBehindLatest" : "0",
+      "minOffsetsBehindLatest" : "0"
+    }
+  } ],
+  "sink" : {
+    "description" : "ForeachBatchSink",
+    "numOutputRows" : -1
+  }
+}
