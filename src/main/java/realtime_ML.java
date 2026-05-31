@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import static org.apache.spark.sql.functions.*;
 
 public class realtime_ML {
-    private static final String MODEL_PATH = "/home/doringu123/SparkKafkaConsumer/models/waterlog/gbt";
+    private static final String MODEL_PATH = "/home/doringu123/SparkKafkaConsumer/models/ML/randomforest";
     private static final String CHECKPOINT_PATH = "/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1";
     private static final String METRICS_CSV = "/home/doringu123/SparkKafkaConsumer/metrics/stream_metrics.csv";
     
@@ -142,7 +142,7 @@ public class realtime_ML {
         Dataset<Row> predictionDF = model.transform(parsedDF);
 
         StreamingQuery query = predictionDF.writeStream()
-                .foreachBatch((VoidFunction2<Dataset<Row>, Long>) realtime::myCustomFunc)
+                .foreachBatch((VoidFunction2<Dataset<Row>, Long>) realtime_ML::myCustomFunc)
                 .option("checkpointLocation", CHECKPOINT_PATH)
                 .trigger(Trigger.ProcessingTime("5 seconds"))
                 .start();

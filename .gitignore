@@ -13,7 +13,7 @@ target/
 checkpoints/
 logs/
 *.log
-
+*.log.[0-9]*
 # --- Data & Machine Learning Outputs ---
 datasets/
 results/

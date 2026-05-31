@@ -7,7 +7,7 @@
 # 1. CẤU HÌNH THAM SỐ ĐỂ THAY ĐỔI THEO TỪNG BƯỚC TEST
 NUM_PROCESSES=2      # Số tiến trình chạy song song (Bước 1: Test 1, 2, 4, 6, 8)
 LINGER_MS=50         # Thời gian chờ gom mẻ (Bước 2: Test 0, 10, 50)
-BATCH_SIZE_KB=64     # Kích thước cụm tính bằng KB (Bước 2: Test 16, 64, 128)
+BATCH_SIZE_KB=16     # Kích thước cụm tính bằng KB (Bước 2: Test 16, 64, 128)
 ACKS="1"             # Cơ chế xác thực: 0 (tốc độ), 1 (mặc định), hoặc all (an toàn)
 
 echo "========================================================="

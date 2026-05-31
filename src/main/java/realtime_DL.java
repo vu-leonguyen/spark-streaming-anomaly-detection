@@ -202,7 +202,7 @@ public class realtime_DL {
         }, Encoders.row(newSchema)); // Đã sửa đổi sử dụng API Encoders.row chuẩn Spark 3.5
 
         StreamingQuery query = predictionDF.writeStream()
-                .foreachBatch((VoidFunction2<Dataset<Row>, Long>) realtime::myCustomFunc)
+                .foreachBatch((VoidFunction2<Dataset<Row>, Long>) realtime_DL::myCustomFunc)
                 .option("checkpointLocation", CHECKPOINT_PATH)
                 .trigger(Trigger.ProcessingTime("5 seconds"))
                 .start();
