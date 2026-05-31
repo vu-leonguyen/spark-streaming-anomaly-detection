@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 import static org.apache.spark.sql.functions.*;
 
-public class realtime {
+public class realtime_ML {
     private static final String MODEL_PATH = "/home/doringu123/SparkKafkaConsumer/models/waterlog/gbt";
     private static final String CHECKPOINT_PATH = "/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_v1";
     private static final String METRICS_CSV = "/home/doringu123/SparkKafkaConsumer/metrics/stream_metrics.csv";
@@ -107,9 +107,9 @@ public class realtime {
         SparkSession spark = SparkSession.builder()
                 .appName("WaterLog-Realtime-Research")
                 .master("local[*]")
-                .config("spark.driver.memory", "2g")
-                .config("spark.executor.memory", "2g")
-                .config("spark.sql.shuffle.partitions", "8")
+                .config("spark.driver.memory", "4g")
+                .config("spark.executor.memory", "4g")
+                .config("spark.sql.shuffle.partitions", "4")
                 .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .config("spark.kryoserializer.buffer.max", "512m")
                 .getOrCreate();
