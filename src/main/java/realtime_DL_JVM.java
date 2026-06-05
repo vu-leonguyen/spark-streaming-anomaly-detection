@@ -5,36 +5,35 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.Encoders; // Import Encoders chuẩn Spark 3.5
+import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.streaming.Trigger;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.storage.StorageLevel;
 
-import ai.onnxruntime.OnnxTensor;
-import ai.onnxruntime.OrtEnvironment;
-import ai.onnxruntime.OrtSession;
+import org.tensorflow.SavedModelBundle;
+import org.tensorflow.Tensor;
+import org.tensorflow.types.TFloat32; // Import để khởi tạo Tensor Float32 chuẩn API 0.5.0
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.apache.spark.sql.functions.*;
 
-public class realtime_DL {
-    private static final String ONNX_MODEL_PATH = "/home/doringu123/SparkKafkaConsumer/models/deep_mlp/mlp_with_onnx/deep_mlp_model.onnx";
-    private static final String SCALER_MEAN_PATH = "/home/doringu123/SparkKafkaConsumer/models/deep_mlp/mlp_with_onnx/scaler_mean.txt";
-    private static final String SCALER_STD_PATH = "/home/doringu123/SparkKafkaConsumer/models/deep_mlp/mlp_with_onnx/scaler_std.txt";
+public class realtime_DL_JVM {
+    private static final String TF_MODEL_DIR = "/home/doringu123/SparkKafkaConsumer/models/deep_mlp/saved_model";
+    private static final String SCALER_MEAN_PATH = "/home/doringu123/SparkKafkaConsumer/models/deep_mlp/scaler_mean.txt";
+    private static final String SCALER_STD_PATH = "/home/doringu123/SparkKafkaConsumer/models/deep_mlp/scaler_std.txt";
     
-    private static final String CHECKPOINT_PATH = "/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_dl";
-    private static final String METRICS_CSV = "/home/doringu123/SparkKafkaConsumer/metrics/stream_metrics.csv";
+    private static final String CHECKPOINT_PATH = "/home/doringu123/SparkKafkaConsumer/checkpoints/realtime_jvm";
+    private static final String METRICS_CSV = "/home/doringu123/SparkKafkaConsumer/metrics/stream_metrics_jvm.csv";
     
     private static final double TRIGGER_INTERVAL_SEC = 5; 
 
@@ -100,7 +99,7 @@ public class realtime_DL {
 
             logMetricsToCSV(batchID, totalRows, normalRows, anomalyRows, latencyMs, inputRowsPerSecond, processedRowsPerSecond);
 
-            System.out.println("\n>>> BATCH: " + batchID + " | Total: " + totalRows + " | Anomaly: " + anomalyRows);
+            System.out.println("\n>>> [JVM BASELINE] BATCH: " + batchID + " | Total: " + totalRows + " | Anomaly: " + anomalyRows);
             System.out.println(">>> Latency: " + latencyMs + "ms | ProcessRate: " + String.format("%.2f", processedRowsPerSecond) + " rows/s");
 
         } catch (Exception e) {
@@ -114,7 +113,7 @@ public class realtime_DL {
         Logger.getLogger("org").setLevel(Level.ERROR);
         
         SparkSession spark = SparkSession.builder()
-                .appName("WaterLog-DeepMLP-Realtime")
+                .appName("WaterLog-DeepMLP-JVM-Baseline")
                 .master("local[*]")
                 .config("spark.driver.memory", "4g")
                 .config("spark.executor.memory", "4g")
@@ -162,8 +161,7 @@ public class realtime_DL {
 
         Dataset<Row> predictionDF = parsedDF.mapPartitions((Iterator<Row> iterator) -> {
             
-            OrtEnvironment env = OrtEnvironment.getEnvironment();
-            OrtSession session = env.createSession(ONNX_MODEL_PATH, new OrtSession.SessionOptions());
+            SavedModelBundle modelBundle = SavedModelBundle.load(TF_MODEL_DIR, "serve");
             
             double[] means = loadScalerParams(SCALER_MEAN_PATH);
             double[] stds = loadScalerParams(SCALER_STD_PATH); 
@@ -172,42 +170,54 @@ public class realtime_DL {
             
             while (iterator.hasNext()) {
                 Row row = iterator.next();
-                float[] features = new float[featureCols.length]; 
                 
+                // Khởi tạo mảng phẳng trên JVM Heap
+                float[] features = new float[featureCols.length]; 
                 for (int i = 0; i < featureCols.length; i++) {
                     Object val = row.getAs(featureCols[i]);
                     double rawVal = (val != null) ? ((Number) val).doubleValue() : 0.0;
                     features[i] = (float) ((rawVal - means[i]) / (stds[i] + 1e-7));
                 }
                 
-                float[][] inputMatrix = new float[][]{features};
-                OnnxTensor inputTensor = OnnxTensor.createTensor(env, inputMatrix);
+                // Đóng gói mảng phẳng vào bộ đệm dữ liệu số thực
+                org.tensorflow.ndarray.buffer.FloatDataBuffer floatBuffer = org.tensorflow.ndarray.buffer.DataBuffers.of(features);
                 
-                try (OrtSession.Result results = session.run(Collections.singletonMap("float_input", inputTensor))) {
-                    float[][] outputProbs = (float[][]) results.get(0).getValue();
-                    double prediction = outputProbs[0][0] >= 0.5 ? 1.0 : 0.0;
-                    
-                    Object[] rowValues = new Object[row.length() + 1];
-                    for (int k = 0; k < row.length(); k++) {
-                        rowValues[k] = row.get(k);
-                    }
-                    rowValues[row.length()] = prediction;
-                    
-                    outputRows.add(RowFactory.create(rowValues));
+                // FIX TRIỆT TIÊU LỖI: Sử dụng TFloat32.tensorOf để nhận diện FloatDataBuffer hoàn hảo
+                Tensor inputTensor = TFloat32.tensorOf(org.tensorflow.ndarray.Shape.of(1, featureCols.length), floatBuffer);
+                
+                Tensor outputTensor = modelBundle.session().runner()
+                        .feed("serving_default_float_input:0", inputTensor)
+                        .fetch("StatefulPartitionedCall:0")
+                        .run()
+                        .get(0);
+                
+                // Trích xuất mảng đệm kết quả xác suất đầu ra
+                org.tensorflow.ndarray.buffer.FloatDataBuffer outputBuffer = outputTensor.asRawTensor().data().asFloats();
+                double probability = outputBuffer.getFloat(0);
+                double prediction = probability >= 0.5 ? 1.0 : 0.0;
+                
+                Object[] rowValues = new Object[row.length() + 1];
+                for (int k = 0; k < row.length(); k++) {
+                    rowValues[k] = row.get(k);
                 }
+                rowValues[row.length()] = prediction;
+                
+                outputRows.add(RowFactory.create(rowValues));
+                
                 inputTensor.close();
+                outputTensor.close();
             }
-            session.close();
+            modelBundle.close();
             return outputRows.iterator();
-        }, Encoders.row(newSchema)); // Đã sửa đổi sử dụng API Encoders.row chuẩn Spark 3.5
+        }, Encoders.row(newSchema));
 
         StreamingQuery query = predictionDF.writeStream()
-                .foreachBatch((VoidFunction2<Dataset<Row>, Long>) realtime_DL::myCustomFunc)
+                .foreachBatch((VoidFunction2<Dataset<Row>, Long>) realtime_DL_JVM::myCustomFunc)
                 .option("checkpointLocation", CHECKPOINT_PATH)
                 .trigger(Trigger.ProcessingTime("5 seconds"))
                 .start();
 
-        System.out.println("DEEP MLP REALTIME MONITORING ENABLED. LOGGING TO: " + METRICS_CSV);
+        System.out.println("JVM-ONLY BASELINE RUNNING. NO AVX2. LOGGING TO: " + METRICS_CSV);
         query.awaitTermination();
     }
 }
