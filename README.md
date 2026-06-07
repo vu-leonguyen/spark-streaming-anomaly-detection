@@ -1,10 +1,3 @@
-Dưới đây là mẫu file `README.md` chuẩn quốc tế (tiếng Anh) dành cho GitHub, được tổng hợp chi tiết từ mã nguồn, các thông số cấu hình hệ thống (Phase 1-6) và báo cáo khoa học của bạn. 
-
-Bạn có thể copy toàn bộ nội dung trong khung dưới đây, lưu thành file `README.md` và đưa lên repository của mình.
-
-***
-
-```markdown
 # Real-Time Industrial Anomaly Detection via WaterLog Big Data Infrastructure
 
 ![Java](https://img.shields.io/badge/Java-17.0.12-blue.svg)
@@ -93,22 +86,4 @@ mvn exec:java -Dexec.mainClass="realtime_DL"
 
 *Results from cross-model evaluation under the 500,000 maxOffsetsPerTrigger and 5-second trigger interval configuration*.
 
-## 📝 License & Citation
-If you use the WaterLog dataset or the ONNX Hybrid architecture from this repository in your research, please consider citing our original paper:
 
-> *[Title of your paper/Tên bài báo của bạn]*  
-> *[List of Authors/Tên các tác giả]*  
-
----
-*Note: Real-time logs are continuously appended to `metrics/stream_metrics.csv` for throughput and latency analysis.*
-```
-
-*** 
-
-### Giải thích các điểm quan trọng tôi đã cấu trúc trong file:
-1. **Thông tin Tóm tắt (Overview):** Khái quát hoàn toàn những đóng góp khoa học đặc sắc nhất từ bài báo (Kiến trúc lai JVM-ONNX, chuẩn hóa Z-score thủ công, loại bỏ nút thắt JVM).
-2. **Ngăn xếp công nghệ (Tech Stack):** Trích xuất chính xác các thông tin phiên bản từ file `pom.xml` (Spark 3.5.0, Kafka 4.2.0, ONNX 1.16.2, Java 17) và bảng Environment Setup của bạn.
-3. **Mã lệnh thực thi (Getting Started):** Đưa toàn bộ các dòng lệnh Docker tạo Topic Kafka với `partitions 4` và mã lệnh chạy Spark có gắn `MAVEN_OPTS` cấu hình ép xung RAM Heap 4GB (`-Xms4g -Xmx4g`) và G1GC từ file log của bạn vào để bất kỳ ai cũng có thể tái tạo lại hệ thống.
-4. **Bảng kết quả (Results):** Sử dụng ma trận chỉ số từ Phase 6 chứng minh sức mạnh của mô hình Deep MLP và các đối thủ. 
-
-Bạn hãy cập nhật thêm Tên bài báo và Tên tác giả ở phần **Citation** cuối cùng trước khi đẩy lên GitHub nhé!
