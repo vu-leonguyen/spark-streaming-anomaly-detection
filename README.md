@@ -11,10 +11,16 @@ This repository contains the source code and infrastructure configuration for a 
 
 To overcome the severe Java Virtual Machine (JVM) Garbage Collection (GC) overheads inherent in Apache Spark MLlib, this project introduces a novel **Decoupled Layered Pipeline**. By manually vectorizing flat Z-score math and embedding a Deep Multilayer Perceptron (MLP) via an **ONNX Runtime C++ Engine**, the system completely bypasses the JVM memory bottlenecks.
 
+## System Architecture
+
+<img width="586" height="144" alt="image" src="https://github.com/user-attachments/assets/e41561ba-0b52-4b72-b0ae-4ea8f2a02211" />
+
+
+
 ## ✨ Key Features & Scientific Contributions
 * **Sub-second Latency & High Throughput:** Achieves a peak throughput of ~11,538.79 rows/s with an ultra-low latency of 869.70 ms.
 * **JVM-ONNX Hybridization:** Executes AVX2 matrix vectorization natively on the CPU by initializing the C++ ONNX engine per-partition within Spark's `mapPartitions`, operating at the speed of lightweight linear models.
-* **Perfect Parallel Alignment:** The "Golden Configuration" rigorously aligns 4 Kafka input partitions, 4 Spark shuffle cores, and 4 Kafka output partitions directly 1-to-1 with physical CPU hardware, eliminating context-switching overhead.
+* **Perfect Parallel Alignment:** The "Golden Configuration" rigorously aligns 4 Kafka input partitions, 4 Spark shuffle partitions, and 4 Kafka output partitions directly 1-to-1 with physical CPU hardware, eliminating context-switching overhead.
 * **Memory Invariance:** Strictly locked 4GB JVM Heap with the G1GC garbage collector ensures a flat physical RAM consumption profile (~4.65 GB) with zero memory leakage.
 
 ## 🛠️ Technology Stack
@@ -31,6 +37,8 @@ The **WaterLog** dataset simulates cyber-physical attacks across a critical wate
 * **Problem Type:** Binary Classification (Normal `0.0` vs Attack `1.0`)
 
 ## 🚀 Getting Started
+
+### Prerequisites: Docker, Java 17+, Maven 3.8+, and Python 3.12 must be installed.
 
 ### 1. Start Kafka Broker (Kraft Mode)
 Ensure Docker is installed and start the Kafka cluster (ZooKeeper-less).
@@ -74,7 +82,7 @@ MAVEN_OPTS="-Xms4g -Xmx4g -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+UnlockDiagnostic
 mvn exec:java -Dexec.mainClass="realtime_DL"
 ```
 
-## 📈 Experimental Results (Hardware constrained: 4 Cores, 4GB Heap)
+## Experimental Results (Hardware constrained: 4 Cores, 4GB Heap)
 
 | Metrics | Logistic Regression | Random Forest | GBT | Deep MLP (Proposed) |
 |---|---|---|---|---|
@@ -84,6 +92,18 @@ mvn exec:java -Dexec.mainClass="realtime_DL"
 | **Avg CPU Usage** | 36.42% | 40.14% | **35.66%** | 40.90% |
 | **RAM (RSS)** | ~4,648 MB | ~4,660 MB | ~4,640 MB | ~4,657 MB |
 
+
+## System Evolution Chart
+<img width="915" height="490" alt="image" src="https://github.com/user-attachments/assets/6ec9ab2d-0b69-411d-85c1-62808bf4ad5a" />
+
+The chart illustrates throughput scaling and latency evolution during infrastructure tuning across different maxOffsetsPerTrigger configurations.
+
 *Results from cross-model evaluation under the 500,000 maxOffsetsPerTrigger and 5-second trigger interval configuration*.
 
+## Author
+Nguyễn Trường Vũ  
+Information Systems Student  
+University of Information Technology
 
+---
+*Note: Real-time logs are continuously appended to `metrics/stream_metrics.csv` for throughput and latency analysis.*
